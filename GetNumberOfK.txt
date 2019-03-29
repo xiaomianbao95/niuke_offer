@@ -66,3 +66,24 @@ public class Solution {
     }
 
 }
+第三种方法，也是用二分法，因为数组中的数都是整数，所以我们可以找k-0.5和k+0.5插入的位置，然后相减
+public class Solution {
+    public int GetNumberOfK(int [] array , int k) {
+       if(array==null)
+           return 0;
+        return binarySearch(array,k+0.5)-binarySearch(array,k-0.5);
+    }
+    public int binarySearch(int [] array,double k){
+        int start=0;
+        int end=array.length-1;
+        while(start<=end){
+            int mid=(start+end)/2;
+            if(array[mid]>k){
+                end=mid-1;
+            }else{
+                start=mid+1;
+            }
+        }
+        return start;
+    }
+}
