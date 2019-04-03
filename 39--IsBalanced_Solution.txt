@@ -1,0 +1,42 @@
+第一种方法：有了之前求二叉树深度的知识后，做这个题，我们很自然想到只要判断左子树和右子树的差是不是不大于1
+就可以判断该树是不是平衡树了（平衡树：空树或者左右子树深度差不超过1）
+public class Solution {
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if(root==null)
+            return true;
+        int left=TreeDepth(root.left);
+        int right=TreeDepth(root.right);
+        int cha=left-right;
+        if(cha<-1||cha>1)
+            return false;
+        return IsBalanced_Solution(root.left)&&IsBalanced_Solution(root.right);
+    }
+    public int TreeDepth(TreeNode root){
+        if(root==null)
+            return 0;
+        int left=TreeDepth(root.left);
+        int right=TreeDepth(root.right);
+        return left>right?left+1:right+1;
+    }
+}
+但是这种方法下面的节点都要遍历好几遍，我们想到每个节点只遍历一遍的办法，就是从下往上遍历到每个节点时，我们都判断下
+该子树是不是平衡树，如果是，再继续往上判断，不是直接退出，也是后序遍历方法。
+public class Solution {
+    boolean isBalanced=true;
+    public boolean IsBalanced_Solution(TreeNode root) {
+        TreeDepth(root);
+        return isBalanced;
+    }
+    public int TreeDepth(TreeNode root){
+        if(root==null)
+            return 0;
+        int left=TreeDepth(root.left);
+        int right=TreeDepth(root.right);
+        int dif=left-right;
+        if(dif<-1||dif>1){
+            isBalanced=false;
+            return 0;
+        }
+        return left>right?left+1:right+1;
+    }
+}

@@ -1,0 +1,44 @@
+第一种方法：求左子树和右子树的深度，比较谁大就给谁加上根节点就是树的最长路径，就是树的深度。
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root==null)
+            return 0;
+        int left=TreeDepth(root.left);
+        int right=TreeDepth(root.right);
+        return left>right?left+1:right+1;
+
+
+    }
+}
+第二种方法：层次遍历，我们可以先建一个队列（队列是先放先出），可以保证先遍历完一层再遍历下一层，
+我们遍历完一层后深度加1，直到把每层都遍历完，就知道了树的深度，注意：Queue是接口，不能直接实例，可以
+实例一个它的类，即：Queue<TreeNode> queue=new LinkedList<TreeNode>();
+import java.util.Queue;
+import java.util.LinkedList;
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root==null)
+            return 0;
+        Queue<TreeNode> queue=new LinkedList<TreeNode>();
+        queue.offer(root);
+        int start=0;
+        int end=1;
+        int deep=0;
+        while(!queue.isEmpty()){
+            TreeNode node=queue.poll();
+            start++;
+            if(node.left!=null){
+                queue.offer(node.left);
+            }
+            if(node.right!=null){
+                queue.offer(node.right);
+            }
+            if(start==end){
+                end=queue.size();
+                start=0;
+                deep++;
+            }
+        }
+        return deep;
+    }
+}
