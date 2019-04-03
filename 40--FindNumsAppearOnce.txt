@@ -1,0 +1,56 @@
+第一种方法：用HashMap,因为它是键值对方式存储，我们可以统计数组array中每个整数出现的次数，最后再
+查看只出现一次的键。
+import java.util.HashMap;
+public class Solution {
+    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+        if(array==null)
+            return;
+        HashMap<Integer,Integer> temp=new HashMap<Integer,Integer>();
+        for(int i=0;i<array.length;i++){
+            if(temp.containsKey(array[i])){
+                temp.put(array[i],2);
+            }else{
+                temp.put(array[i],1);
+            }
+        }
+         
+        num1[0]=0;
+        for(int i=0;i<array.length;i++){
+            if(temp.get(array[i])==1){
+                if(num1[0]==0){
+                    num1[0]=array[i];
+                }else{
+                    num2[0]=array[i];
+                }
+            }
+        }
+    }
+}
+第二种方法：因为数组中只有两个只出现一次的数，其他的数都是出现了两次，我们知道二进制中相同的数异或等于0，不同的数异或等
+1，我们把数组中的数，从第一个开始到最后都一个个都异或，相同的相互抵消，最后得到的是那两个只出现一次的数异或的结果，我们
+从后往前找到第一次出现1的位置，比如这个位置是3，然后用这个有1位置，把数组分成两个子数组，这样第三个位置有1的数在一组，其
+他的数在另一组，那两个不相同的数肯定分在了不同的组，再分别把每个子数组的数异或得到的就是那个只出现一次的数。
+public class Solution {
+    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+        if(array==null||array.length==0)
+            return;
+        int number=0;
+        for(int i=0;i<array.length;i++){
+            number^=array[i];
+        }
+        int firstindex=1;
+        while((number&firstindex)==0){
+            firstindex=firstindex<<1;
+        }
+        int a=0,b=0;
+        for(int i=0;i<array.length;i++){
+            if((array[i]&firstindex)==0){
+                a^=array[i];
+            }else{
+                b^=array[i];
+            }
+        }
+        num1[0]=a;
+        num2[0]=b;
+    }
+}
