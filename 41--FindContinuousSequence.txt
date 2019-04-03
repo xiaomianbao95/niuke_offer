@@ -1,0 +1,55 @@
+第一种方法：定义两个指针，在这两个指针范围内寻找连续整数序列和可以达到S的一组或者几组数。
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> list=new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> temp=new ArrayList<Integer>();
+        if(sum<3)
+            return list;
+            int start=1;
+            int end=2;
+        while(start<end){
+            int count=0;
+            for(int i=start;i<=end;i++){
+                 count+=i;
+               }
+                if(sum-count==0){
+                    for(int j=start;j<=end;j++){
+                        temp.add(j);
+                    }
+                    list.add(new ArrayList<>(temp));
+                    temp.clear();
+                    start++;
+                }else if(sum-count<0){
+                    start++;
+                }else{
+                    end++;
+                }
+        }
+        return list;
+    }
+}
+第二种方法:因为我们要找的和为S的连续正数序列，所以这个序列是等差数列，而这个序列的中间值代表了平均值的大小。假设序列长度为
+n,s/n代表了中间值得大小。
+n分为两种情况：
+1）当n为奇数时，序列中间数正好是序列的平均值，所以条件为：(n&1==1)&&(s%n==0)
+2)当n为偶数时，序列中间两个数的平均值是序列的平均值，平均数的小数部分是0.5，说明余数是除数的一半
+所以条件可以为:(s%n)*2==n
+由题知n>=2，我们可以从2到n遍历一遍找到，最大的n如何确定呢，由于数列是等差数列，求和公式s=(1+n)*n/2
+可以得到n<sqrt(2s);所以我们就可以在2-n范围，从n开始遍历找到满足要求的。
+mport java.util.ArrayList;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer> > list=new  ArrayList<ArrayList<Integer> >();
+        for(int n=(int)Math.sqrt(2*sum);n>=2;n--){
+            if((n&1)==1&&(sum%n)==0||(sum%n)*2==n){
+                ArrayList<Integer> temp=new ArrayList<Integer>();
+                for(int j=0, k=(sum/n)-(n-1)/2;j<n;j++,k++){%%k=(sum/n)-(n-1)/2求满足要求序列的起始位置的数
+                    temp.add(k);
+                }
+                list.add(temp);
+            }
+        }
+        return list;
+    }
+}
