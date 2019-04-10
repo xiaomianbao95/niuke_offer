@@ -1,0 +1,95 @@
+前一道题用了定义两个指针的方法，这道题我们也可以用定义两个指针的方法，一个指针从头开始，一个指针从尾开始，
+?也就是“夹逼思想”，当两个数相加等于sum,则就是所求的，加入创建的数组链表输出，当他们之和小于sum时，
+?说明array[start]不够大，因为是递增数组，所以往前移动一位即，start++,如果他们之和大于sum，说明array[end]太大，
+?所以向后退一位，即end--.满足要求的数字可能有多对，但是我们从头和尾开始的，并且数组是递增的，相差越大的一对数
+?乘积越小，所以从头和尾开始最先碰到的一组就是满足要求的，其他的就不用管了。
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<Integer> list=new ArrayList<Integer>();
+        if(array==null||array.length==0)
+            return list;
+        int start=0;
+        int end=array.length-1;
+        while(start<end){
+            int count=array[start]+array[end];
+            if(count==sum){
+                list.add(array[start]);
+                list.add(array[end]);
+                break;
+            }else if(count>sum){
+                end--;
+            }else{
+                start++;
+            }
+        }
+        return list;
+    }
+}
+还有一种普通的思想的，就是从第一个开始依次和后面的相加满足要求的存下来，最后比较里面数的乘积大小?
+?import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+         ArrayList<Integer> temp1=new ArrayList<Integer>();
+        if(array==null||sum==0)
+            return temp1;
+        ArrayList<ArrayList<Integer>> list=new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<array.length;i++){
+            if(array[i]<sum){
+                for(int j=i+1;j<array.length;j++){
+                int count=array[i]+array[j];
+                if(count==sum){
+                    ArrayList<Integer> temp=new ArrayList<Integer>();
+                    temp.add(array[i]);
+                    temp.add(array[j]);
+                    list.add(temp);
+                }else if(count>sum){
+                    break;
+                }else{
+                    continue;
+                }
+             }
+            }
+        }
+         
+        if(list.size()==0)
+            return temp1;
+        if(list.size()==1){
+            int a=0;
+            int b=0;
+        if(list.get(0).get(0)<list.get(0).get(1)){
+             a=list.get(0).get(0);
+             b=list.get(0).get(1);
+        }else{
+             a=list.get(0).get(1);
+             b=list.get(0).get(0);
+        }
+        temp1.add(a);
+        temp1.add(b);
+        return temp1;
+        }else if(list.size()>=2){
+            int flag=0;
+            int min=list.get(0).get(0)*list.get(0).get(1);
+            for(int i=0;i<list.size()-1;i++){
+            if(min>list.get(i+1).get(0)*list.get(i+1).get(1)){
+                min=list.get(i+1).get(0)*list.get(i).get(1);
+                flag=i+1;
+               }
+           }
+            int a=0;
+            int b=0;
+        if(list.get(flag).get(0)<list.get(flag).get(1)){
+             a=list.get(flag).get(0);
+             b=list.get(flag).get(1);
+        }else{
+             a=list.get(flag).get(1);
+             b=list.get(flag).get(0);
+        }
+        temp1.add(a);
+        temp1.add(b);
+        }
+        return temp1;
+    }
+}
+
+?
