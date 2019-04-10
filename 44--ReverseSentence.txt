@@ -1,0 +1,53 @@
+第一种方法：先用totoCharArray()方法把字符串变成char型数组，再定义一个翻转方法，对数组依次进行翻转
+最后再遍历找空格，找到一个空格说明一个单词结束，把这个单词再进行翻转，注意最后没有空格，所以要单独对最后
+一个单词进行翻转，最后用valueOf()方法输出：返回 char 数组参数的字符串表示形式。
+public class Solution {
+    public String ReverseSentence(String str) {
+        if(str==null||str.length()==0)
+            return str;
+        if(str.trim().length()==0)
+            return str;
+        char[] s1=str.toCharArray();
+        reverse(s1,0,s1.length-1);
+        int start=0;
+        for(int i=0;i<s1.length;i++){
+            if(s1[i]==' '){
+                int flag=i;
+                reverse(s1,start,flag-1);
+                start=flag+1;
+            }
+        }
+        reverse(s1,start,s1.length-1);//翻转最后一单词
+        return String.valueOf(s1);
+    }
+    public void reverse(char s1[],int low,int high){
+        while(low<high){
+            char temp=s1[high];
+            s1[high]=s1[low];
+            s1[low]=temp;
+            low++;
+            high--;
+        }
+    }
+}
+第二种方法:主要应用了trim()和split()方法
+trim（）：返回字符串的副本，忽略前导空白和尾部空白。
+split()：根据给定正则表达式的匹配拆分此字符串。
+先用trim()去除前后的空格，再用空格对字符串进行拆分。这样就把单词存成数组，最后把拆分的单词数组从后往前一个个拼接起来
+返回，完成。注意单词拼接时中间有空格，所以要加" ",但是最后一个就不用了，单词拼接可以用加""变成字符串
+public class Solution {
+    public String ReverseSentence(String str) {
+        if(str==null||str.length()==0)
+            return str;
+        if(str.trim().length()==0)
+            return str;
+        String [] array=str.split(" ");
+        String res="";
+        for(int i=array.length-1;i>=0;i--){
+            res+=array[i];
+            if(i!=0)
+                res+=" ";
+        }
+        return res;
+    }
+}
