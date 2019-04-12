@@ -64,3 +64,34 @@ public class Solution {
 
     }
 }
+第三种方法：其实与第二种方法思路一样只是在判断是否包括重复数时，用了位运算,bit-Map
+if(((flag>>number)&1)==1) return false;
+            flag=flag|(1<<number);
+这两条语句可以判断是否包含重复字符1<<number;把1移动该数字位，就可以把该位（也就是该数字）
+置1（bit-Map），flag|(1<<number)就可以把该数字所在的位在flag中置1，((flag>>number)&1)==1，再把flag右移，
+如果包含应该右移回到1所以通过与1判断是否包含。
+public class Solution {
+    public boolean isContinuous(int [] numbers) {
+        if(numbers==null||numbers.length==0)
+            return false;
+        int[] array= new int[14];
+        int max=-1;
+        int min=14;
+        int flag=0;
+        for(int i=0;i<numbers.length;i++){
+            if(numbers[i]==0)
+                continue;
+            int number=numbers[i];
+            if(((flag>>number)&1)==1) return false;
+            flag=flag|(1<<number);
+            if(numbers[i]>max){
+                max=numbers[i];
+            }
+            if(numbers[i]<min){
+                min=numbers[i];
+            }
+            if(max-min>=5) return false;
+        }
+            return true;
+    }
+}
