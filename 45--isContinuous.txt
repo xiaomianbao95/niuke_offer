@@ -32,3 +32,35 @@ public class Solution {
         return false;
     }
 }
+第二种方法 新建一个数组以原有数组的数作为新的数组下标统计重复数组个数，如果大于1，返回false；
+如果不重复就和最大最小的比较，最后max-min。如果max-min<5,说明可以组成顺子。注意，初始时，我们定义max
+=-1,min=14.因为牌面大小从0到13，这样可以保证只有一个数时，也能得出max min.
+public class Solution {
+    public boolean isContinuous(int [] numbers) {
+        if(numbers==null||numbers.length==0)
+            return false;
+        int[] array= new int[14];
+        int max=-1;
+        int min=14;
+        for(int i=0;i<numbers.length;i++){
+            if(numbers[i]==0)
+                continue;
+            array[numbers[i]]++;
+            
+            if(array[numbers[i]]>1){
+                return false;
+            }else{
+            if(numbers[i]>max){
+                max=numbers[i];
+            }
+            if(numbers[i]<min){
+                min=numbers[i];
+            }
+            }
+        }
+        if(max-min<5)
+            return true;
+        return false;
+
+    }
+}
