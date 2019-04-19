@@ -1,5 +1,6 @@
 求1+2+3+...+n，要求不能使用乘除法、
 for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+第一种方法：
 因为有很多不能使用的，我们看到这个题，第一个就会想到循环算，但不能用判断语句，
 我们转循环成递归算，递归必须要有结束语句，又不能用if，这里我们用短路运算符“&&”
 public class Solution {
@@ -13,3 +14,10 @@ public class Solution {
 }
 当n==0时，(n>0)返回false,就不会再判断后面的了
 当（n>0）为true时，再执行后面的。注意，“&&”两边必须同时保持boolean型，所以后面一项也加>0.
+第二种方法：
+用Math中的方法，等差数列求和，S=(n^2+n)/2 右移一位实现除2运算。
+public class Solution {
+    public int Sum_Solution(int n) {
+        return (int)(Math.pow(n,2)+n)>>1;
+    }
+}
