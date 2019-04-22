@@ -1,0 +1,48 @@
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，
+而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字
+符匹配整个模式。
+例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配。
+思路：
+首先考虑，字符串和模式同时等于null，则返回true；若字符串不等于null,而模式等于null
+那根本没得匹配，返回false；若字符串等于null，模式不等于null，是有可能匹配成功的，
+因为*前面的字符可以出现任意次（包括0次），如""和".*"就匹配成功。
+
+然后从字符串中取出一个字符和模式中的字符与匹配，如果模式中是‘.’，可以
+匹配任何字符，如果模式中字符和字符串中字符相等，则匹配，接着匹配后面的，当遇到
+模式中的‘*’时，情况就复杂（*可以代表它前面的字符可以是0个或者一个多个）
+1.当第二个字符是‘*’,1）字符不移动，模式移动两个；因为*可以匹配0个，直接忽略*和
+它前面的。如果模式第一个和字符串第一个匹配，模式有两种选择：
+2）字符后移一个，模式移动两个；3）字符移动一个，模式不移动（因为*可以匹配多个）；
+其中情况2）也可以忽略，因为1）和3）组合起来可以实现2）。
+2.当第二个字符不是‘*’
+那就从第一个字符开始比，匹配同时移动一个，不匹配那整齐就不匹配，返回false.
+还要注意，java中时刻要检查数组是否越界
+public class Solution {
+    public boolean match(char[] str, char[] pattern)
+    {
+        if(str==null&&pattern==null)
+            return true;
+        if(str!=null&&pattern==null)
+            return false;
+        int index1=0,index2=0;
+        return matchCore(str,index1,pattern,index2);
+    }
+    public boolean matchCore(char[] str,int index1,char[] pattern,int index2){
+        if(index1<str.length&&index2>=pattern.length)
+            return false;
+        if(index1>=str.length&&index2==pattern.length)
+            return true;
+        if(index2+1<pattern.length&&(pattern[index2+1]=='*')){
+            if(index1<str.length&&(str[index1]==pattern[index2]||(pattern[index2]=='.'))){
+                return  matchCore(str,index1+1,pattern,index2+2)||
+                    matchCore(str,index1,pattern,index2+2)||
+                    matchCore(str,index1+1,pattern,index2);
+            }else{
+                return  matchCore(str,index1,pattern,index2+2);
+            }
+        }
+        if(index1<str.length&&(str[index1]==pattern[index2]||(pattern[index2]=='.')))
+            return matchCore(str,index1+1,pattern,index2+1);
+        return false;
+    }
+}
