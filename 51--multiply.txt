@@ -1,0 +1,44 @@
+给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...
+*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
+第一种方法:求B[i]除了i处的数，其他的连乘，那么我们就用i把数组分成两部i前面一部分，后面一部分，
+就可以得到结果
+import java.util.ArrayList;
+public class Solution {
+    public int[] multiply(int[] A) {
+        int len=A.length;
+        int[] B=new int[len];
+        if(A==null||A.length==0)
+            return B;
+        for(int i=0;i<len;i++){
+            int temp=1;
+            int flag=i;
+            for(int k=0;k<=i-1;k++){
+                temp=temp*A[k];
+            }
+            for(int j=flag+1;j<len;j++){
+                temp=temp*A[j];
+            }
+            B[i]=temp;
+        }
+        return B;
+    }
+}
+第二种方法:可以把数组B看成一个矩阵，对角线元素都是1,我们可以先从上到下算出下三角的值，
+然后从下到上算出上三角的值，就可以得到结果。
+import java.util.ArrayList;
+public class Solution {
+    public int[] multiply(int[] A) {
+        int len=A.length;
+        int[] B=new int[len];
+        B[0]=1;
+        for(int i=1;i<len;i++){
+            B[i]=B[i-1]*A[i-1];
+        }
+        int temp=1;
+        for(int i=len-2;i>=0;i--){
+            temp=temp*A[i+1];
+            B[i]=B[i]*temp;
+        }
+        return B;
+    }
+}
