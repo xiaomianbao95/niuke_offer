@@ -33,3 +33,31 @@ public class Solution {
         return '#';
     }
 }
+第二种方法：用一个int数组进行存储，把字符作为数组的下标，字符出现的次数作为数组内存的数，
+因为ASCII码表总共有256个字符，每个字符占八位，所以可以建一个容量为256的int数组，常见的字符
+有128个，也可以建一个容量为128的int数组，为了保证插入顺序，我们依然用一个字符串保持顺序
+最后遍历字符串在数组中查找即可。
+public class Solution {
+    int[] temp=new int[256];
+    StringBuffer sb=new StringBuffer();
+    //Insert one char from stringstream
+    public void Insert(char ch)
+    {
+        sb.append(ch);
+        if(temp[ch]==0){
+            temp[ch]=1;
+        }else{
+            temp[ch]=temp[ch]+1;
+        }
+    }
+  //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce()
+    {
+        for(int i=0;i<sb.length();i++){
+            if(temp[sb.charAt(i)]==1){
+                return sb.charAt(i);
+            }
+        }
+    return '#';
+    }
+}
