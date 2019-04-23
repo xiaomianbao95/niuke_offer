@@ -1,0 +1,38 @@
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2",
+"-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+分析题目把每种特殊情况考虑到正确的形式应该是：
+1）A[.[B]][E|eC]  2).[[B][E|eC] 其中A，C必须是整数，前面可以有正负号，B也必须是整数，B前不能有正负号
+下来分析不符合规则的情况：
+1）当遇到‘+’或者‘-’时，判断如果不是在首位出现，看它的前面是不是e或者E，如果不是就不符合规则，
+如果其前面是‘e’或者‘E’后面没有任何数不符合规则（其实可以通过4）判断，可以省略）。
+2）当遇到‘e’或者‘E’时，统计个数，如果出现次数大于1，不符合规则，如果其后面没有任何数也不符合规则
+3）当遇到‘.’时,统计出现的个数如果大于1，不符合规则，如果其前面有‘e’或者‘E’时也不符合规则
+这时通过判断‘e’或者‘E’的个数不为0,就不符合规则。
+
+4）扫描其他数是不是在‘0’-‘9’,如果不是，不符合规则。
+public class Solution {
+    public boolean isNumeric(char[] str) {
+        if(str==null)
+            return false;
+        int flag1=0,flag2=0;
+        for(int i=0;i<str.length;i++){
+            if(str[i]=='+'||str[i]=='-'){
+                if(i>0&&str[i-1]!='e'&&str[i-1]!='E')
+                    return false;
+            }else if(str[i]=='.'){
+                flag1++;
+                if(flag1>1||flag2!=0)
+                    return false;
+            }else if(str[i]=='E'||str[i]=='e'){
+                flag2++;
+                if(flag2>1)
+                    return false;
+                if(i==(str.length-1))
+                    return false;
+            }else if(str[i]<'0'||str[i]>'9'){
+                 return false;
+            }
+        }
+        return true;
+    }
+}
