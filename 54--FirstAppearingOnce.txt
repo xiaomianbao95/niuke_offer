@@ -33,6 +33,32 @@ public class Solution {
         return '#';
     }
 }
+这里还可以用LinkedHashMap存储，它可以保证存储的顺序不变，代码如下
+import java.util.LinkedHashMap;
+import java.util.Map;
+public class Solution {
+    Map<Character,Integer> map=new LinkedHashMap<Character,Integer>();
+    //Insert one char from stringstream
+    public void Insert(char ch)
+    {
+        
+        if(!map.containsKey(ch)){
+            map.put(ch,1);
+        }else{
+            map.put(ch,map.get(ch)+1);
+        }
+    }
+  //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce()
+    {
+        for(Map.Entry<Character,Integer> s:map.entrySet()){
+            if(s.getValue()==1){
+                return s.getKey();
+            }
+        }
+        return '#';
+    }
+}
 第二种方法：用一个int数组进行存储，把字符作为数组的下标，字符出现的次数作为数组内存的数，
 因为ASCII码表总共有256个字符，每个字符占八位，所以可以建一个容量为256的int数组，常见的字符
 有128个，也可以建一个容量为128的int数组，为了保证插入顺序，我们依然用一个字符串保持顺序
