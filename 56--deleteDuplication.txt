@@ -1,0 +1,86 @@
+在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 
+例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+第一种方法:可能有点复杂，用最笨的思路一点点改出来的
+先要定义一个头结点，头结点下一个就是给的节点Phead,这样可以避免第一个就是重复的，不好操作
+ListNode head=new ListNode(-1);
+        head.next=pHead;
+head为了定位返回的头结点。重要重要重要！！！！！！
+我是定义了三个指针，cuurrent=head,p1=head.next,p2=p1.next;cuurent用来记录重复的节点也就是要删除的
+节点的前一个，然后就是重复了，让current.next=p2.next,就能删除重复的。当重复的个数为奇数时，就会漏删一个
+所以又定义一个temp记录要删除的p2，再与p1比较，如果相等，再删除p1,
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead)
+    {
+        if(pHead==null)
+            return pHead;
+        ListNode head=new ListNode(-1);
+        head.next=pHead;
+        ListNode current=head;
+        ListNode p1=current.next;
+        ListNode p2=p1.next;
+        while(p2!=null){
+            if((p1.val==p2.val)&&(p2.next!=null)){
+                ListNode temp=p2;
+                current.next=p2.next;
+                p1=current.next;
+                if((p1.next==null)&&(p1.val==temp.val)){
+                    current.next=p1.next;
+                    return head.next;
+                }
+                p2=p1.next;
+            }else if((p1.val==p2.val)&&(p2.next==null)){
+                current.next=p2.next;
+                return head.next;
+            }else{
+                 current=current.next;
+                 p1=p1.next;
+                 p2=p2.next;
+            }
+        }
+        return head.next;
+    }
+}
+改进版本：
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead)
+    {
+        if(pHead==null)
+            return pHead;
+        ListNode head=new ListNode(-1);
+        head.next=pHead;
+        ListNode p1=head;
+        ListNode p2=pHead;
+        while(p2!=null){
+            if(p2.next!=null&&(p2.val==p2.next.val)){
+                while(p2.next!=null&&(p2.val==p2.next.val)){//可以把连续重复的删除
+                    p2=p2.next;
+                }
+                p1.next=p2.next;
+            }else{
+                p1=p1.next;
+            }
+            p2=p2.next;
+        }
+        return head.next;
+    }
+别人的递归版本：
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead)
+    {
+        if(pHead==null||pHead.next==null)
+            return pHead;
+        if(pHead.val==pHead.next.val){//存在重复节点
+            ListNode p1=pHead.next;
+            while(p1!=null&&(p1.val==pHead.val)){
+                //跳过相同的，直到找到一个不同的
+                p1=p1.next;
+            }
+            //从第一个与当前节点不同的开始递归
+            return deleteDuplication(p1);
+        }else{//当前节点不是重复节点
+            pHead.next=deleteDuplication(pHead.next);//保留当前节点，从当前节点下一个开始递归
+            return pHead;
+        }
+    }
+}
+}
