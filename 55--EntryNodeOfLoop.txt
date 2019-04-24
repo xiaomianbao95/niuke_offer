@@ -105,3 +105,22 @@ public class Solution {
         return null;
     }
 }
+第三种方法：断链法
+public class Solution {
+
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        if(pHead==null)
+            return null;
+        ListNode slow=pHead;
+        ListNode fast=slow.next;
+        if(fast==null)
+            return null;
+        while(fast!=null){
+            slow.next=null;
+            slow=fast;
+            fast=fast.next;
+            }
+        return slow;
+    }
+}
