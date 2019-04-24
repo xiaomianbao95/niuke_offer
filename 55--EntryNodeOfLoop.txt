@@ -1,0 +1,107 @@
+给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+第一种方法:
+第一步：定义两个指针，一个一次走两次，一个一次走一步，如果他们两能相遇，则一定存在环
+否则，不存在。
+第二步:求入口节点，也定义两个指针开始都指向头结点，假设环中节点个数为n,让一个节点先走n步，然后两个节点
+再同步走，当他们相遇时就是在入口节点处。为什么这么说呢？因为两个节点都是从头节点开始，第二个节点
+先走n步，现在它所处的位置到链表尾部的节点数就会和第一个节点到达入口节点之前的节点数相同，那他们再走一步
+不就相遇了。
+第三步：怎么知道环中节点数，通过第一步可以知道相遇的节点，相遇一定是在环中，那我们就定义
+一个指针从该位置开始走直到再次遇见自己，走的同时统计走过的节点数，即为环中节点数。
+
+/*
+ public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        ListNode meetingNode=meetingNode(pHead);
+        if(meetingNode==null)
+            return null;
+        //得到环中节点数目
+        int count=1;
+        ListNode p1=meetingNode;
+        while(p1.next!=meetingNode){
+            p1=p1.next;
+            count++;
+        }
+        ListNode p2=pHead;
+        for(int i=0;i<count;i++){
+            p2=p2.next;
+        }
+        ListNode p3=pHead;
+        while(p2!=p3){
+            p2=p2.next;
+            p3=p3.next;
+        }
+        return p2;
+    }
+    public ListNode meetingNode(ListNode pHead){
+        if(pHead==null)
+            return null;
+        ListNode slow=pHead.next;
+        if(slow==null)
+            return null;
+        ListNode fast=slow.next;
+        while(slow!=null&&fast!=null){
+            if(fast==slow)
+                return fast;
+            slow=slow.next;
+            fast=fast.next;
+            if(fast!=null)
+                fast=fast.next;
+        }
+        return null;
+    }
+}
+第二种方法:和第一种大致思路相同，只是不用统计环中节点数，代码更短些
+定义两个指针，slow一次走一步，fast一次走两步
+假设入口节点之前的节点个数为x,环中节点个数为n,slow在环中走的节点个数为k,fast在环中走了m圈
+则，当他们相遇时，2*(x+k)=mn+x+k，那么，x=mn-k.我们可以看出相遇时，再走n-k步就可以到达入口节点
+x=(m-1)*n+n-k,从这里我们知道，一个指针从头开始走，一个指针从相遇位置走m-1圈，再走n-k步，他们就
+会在入口节点处相遇，所以有如下代码：
+/*
+ public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        if(pHead==null)
+            return null;
+        ListNode slow=pHead.next;
+        if(slow==null)
+            return null;
+        ListNode fast=slow.next;
+        while(slow!=null&&fast!=null){
+            if(slow==fast){
+                slow=pHead;
+                while(slow!=fast){
+                    slow=slow.next;
+                    fast=fast.next;
+                }
+                return slow;
+            }
+            slow=slow.next;
+            fast=fast.next;
+            if(fast!=null)
+                fast=fast.next;
+        }
+        return null;
+    }
+}
