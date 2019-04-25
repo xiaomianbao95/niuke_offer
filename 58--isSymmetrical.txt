@@ -1,0 +1,52 @@
+请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个
+二叉树同此二叉树的镜像是同样的，定义其为对称的。
+思路：如果是对称树，则必须左子树等于右子树，左子树的左子树等于右子树的右子树，左子树的右子树等于
+右子树的左子树
+第一种方法：用栈
+import java.util.Stack;
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot)
+    {
+        if(pRoot==null)
+            return true;
+        Stack<TreeNode> stack=new Stack<TreeNode>();
+        stack.push(pRoot.left);
+        stack.push(pRoot.right);
+        while(!stack.isEmpty()){
+            TreeNode right=stack.pop();
+            TreeNode left=stack.pop();
+            if(right==null&&left==null)
+                continue;
+            if(right==null||left==null)
+                return false;
+            if(right.val!=left.val)
+                return false;
+            stack.push(left.left);
+            stack.push(right.right);
+            stack.push(left.right);
+            stack.push(right.left);
+        }
+        return true;
+    }
+}
+第二种方法：递归
+import java.util.Stack;
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot)
+    {
+        if(pRoot==null)
+            return true;
+        return Symmetrical(pRoot.left,pRoot.right);
+    }
+    boolean Symmetrical(TreeNode left,TreeNode right){
+        if(right==null&&left==null)
+            return true;
+        if(right==null||left==null)
+            return false;
+        if(left.val==right.val){
+            return Symmetrical(left.left,right.right)&&
+            Symmetrical(left.right,right.left);
+        }
+        return false;
+    }
+}
