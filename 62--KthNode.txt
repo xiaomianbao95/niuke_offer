@@ -1,0 +1,71 @@
+给定一棵二叉搜索树，请找出其中的第k小的结点。例如， （5，3，7，2，4，6，8）
+中，按结点数值大小顺序第三小结点的值为4。
+分析:要找出二叉搜索树的第k小的节点，如果遍历出的结果是有序的我们就能很方便的找出
+第k小的节点，而中序遍历的结果就是有序的，所以我们把中序遍历结果存进Arraylist链表数组中，
+最后通过索引找就可以了
+第一种代码：
+import java.util.ArrayList;
+public class Solution {
+    ArrayList<TreeNode> list=new ArrayList<TreeNode>();
+    TreeNode KthNode(TreeNode pRoot, int k)
+    {
+        if(pRoot==null||k==0)
+            return null;
+         mid(pRoot,list);
+        if(k>list.size())
+            return null;
+        return list.get(k-1);
+    }
+    void mid(TreeNode pRoot,ArrayList<TreeNode> list){
+        if(pRoot==null)
+            return ;
+        mid(pRoot.left,list);
+        list.add(pRoot);
+        mid(pRoot.right,list);
+    }
+}
+第二种代码：递归方法，边遍历边找出第k小的节点，不用全部遍历完，再找，用一个index
+计数器记录遍历过得节点。
+public class Solution {
+    int index=0;
+    TreeNode KthNode(TreeNode pRoot, int k)
+    {
+        if(pRoot!=null){
+            TreeNode node=KthNode(pRoot.left, k);
+            if(node!=null)
+                return node;
+            index++;
+            if(index==k)
+                return pRoot;
+            node=KthNode(pRoot.right, k);
+            if(node!=null)
+                return node;
+        }
+        return null;
+    }
+}
+第三种，非递归版本，边遍历边找第k小的节点
+public class Solution {
+    TreeNode KthNode(TreeNode pRoot, int k)
+    {
+        if(pRoot==null||k==0)
+            return null;
+        Stack<TreeNode> stack=new Stack<TreeNode>();
+        int index=0;
+        TreeNode node=pRoot;
+        while(node!=null||!stack.isEmpty()){
+            if(node!=null){
+                stack.push(node);
+                node=node.left;
+            }else{
+                node=stack.pop();
+                index++;
+                if(index==k){
+                    return node;
+                }
+                node=node.right;
+            }
+        }
+        return null;
+    }
+}
