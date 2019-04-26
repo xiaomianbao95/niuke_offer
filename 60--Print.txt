@@ -1,0 +1,70 @@
+从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+
+递归方法：用了前序遍历，深度深一层，扩容一个数组。
+import java.util.ArrayList;
+
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+public class Solution {
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer> > res=new ArrayList<ArrayList<Integer> >();
+        depth(pRoot,1,res);
+        return res;
+    }
+    private void depth(TreeNode pRoot,int depth, ArrayList<ArrayList<Integer>> res){
+        if(pRoot==null) return;
+        if(depth>res.size())
+            res.add(new ArrayList<Integer>());
+        res.get(depth-1).add(pRoot.val);
+        
+        depth(pRoot.left,depth+1,res);
+        depth(pRoot.right,depth+1,res);
+    }
+    
+}
+用LinkedList:
+import java.util.LinkedList;
+import java.util.Iterator;
+public class Solution {
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer> > res=new ArrayList<ArrayList<Integer> >();
+        if(pRoot==null)
+            return res;
+        ArrayList<Integer> array=new ArrayList<Integer>();
+        LinkedList<TreeNode> list=new LinkedList<TreeNode>();
+        list.addLast(null);
+        list.addLast(pRoot);
+        while(list.size()!=1){
+            TreeNode node=list.removeFirst();
+            if(node==null){
+                Iterator iter=list.iterator();
+                while(iter.hasNext()){
+                    TreeNode temp=(TreeNode)iter.next();
+                    array.add(temp.val);
+                }
+                res.add(new ArrayList<Integer>(array));
+                array.clear();
+                list.addLast(null);
+                continue;
+            }
+            if(node.left!=null)
+                list.addLast(node.left);
+            if(node.right!=null){
+                list.addLast(node.right);
+            }
+        }
+    return res;
+    }
+     
+}
