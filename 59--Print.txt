@@ -1,0 +1,47 @@
+请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从
+右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+分析题目，刚好是奇数层从左到右打印，偶数层从右到左打印，我们选择用栈存每一层的节点
+因为奇数层是左到右打印的，栈是先进后出的，所以我们存奇数层节点时要从右到左存，也就是先存
+右子节点再存左子节点，偶数层是从右到左打印，所以存的时候要从左到右存，也就是先存左子节点，
+再存右子节点。所以我们需要两个栈，一个存奇数层，一个存偶数层。
+import java.util.Stack;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer> > res=new ArrayList<ArrayList<Integer> >();
+        if(pRoot==null)
+            return res;
+        Stack<TreeNode> s1=new Stack<TreeNode>();
+        Stack<TreeNode> s2=new Stack<TreeNode>();
+        int flag=1;
+        s1.push(pRoot);
+        while(!s1.isEmpty()||!s2.isEmpty()){
+            if(flag%2!=0&&!s1.isEmpty()){
+                ArrayList<Integer> temp=new ArrayList<Integer>();
+                while(!s1.isEmpty()){
+                    TreeNode node=s1.pop();
+                    temp.add(node.val);
+                    if(node.left!=null)
+                        s2.push(node.left);
+                    if(node.right!=null)
+                        s2.push(node.right);
+                }
+                res.add(temp);
+                flag++;
+            }
+            if(flag%2==0&&!s2.isEmpty()){
+                ArrayList<Integer> temp=new ArrayList<Integer>();
+                while(!s2.isEmpty()){
+                    TreeNode node=s2.pop();
+                    temp.add(node.val);
+                    if(node.right!=null)
+                        s1.push(node.right);
+                    if(node.left!=null)
+                        s1.push(node.left);
+                }
+                res.add(temp);
+                flag++;
+            }
+        }
+        return res;
+    }
+}
