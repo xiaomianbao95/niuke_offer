@@ -45,3 +45,63 @@ public class Solution {
         return res;
     }
 }
+第二种方法：用LinkedList 存节点，LinkedList有双向链表的特点，我们可以奇数层从前往后输出，偶数层
+从后往前输出，迭代器中，iterator()从前往后输出，descendingIterator()从后往前输出；通过在每一层节点
+最后存入null，当取到null时，表示开始新的一层遍历了，就要换遍历的方向。存节点时，就按顺序左右正常
+存就可以。
+注意：continue的重要性，因为当遇到node==null时，它没有左右子树，所以不用进行存储，可是在list中它
+的后面还有其他节点，我们要一个一个取每个节点，再存它的左右子树，所以必须continue。
+import java.util.ArrayList;
+
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.LinkedList;
+import java.util.Iterator;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer> > res=new ArrayList<ArrayList<Integer> >();
+        if(pRoot==null)
+            return res;
+        LinkedList<TreeNode> list=new LinkedList<TreeNode>();
+        ArrayList<Integer> array=new ArrayList<Integer>();
+        list.addLast(null);//添加分层分隔符
+        list.addLast(pRoot);
+        boolean flag=true;
+        while(list.size()!=1){
+            TreeNode node=list.removeFirst();
+            if(node==null){//到达分隔符
+                Iterator<TreeNode> iter=null;
+                if(flag){
+                    iter=list.iterator();//从前往后遍历
+                }else{
+                    iter=list.descendingIterator();//从后往前遍历
+                }
+                flag=!flag;
+                while(iter.hasNext()){
+                    TreeNode temp=iter.next();
+                    array.add(temp.val);
+                }
+                res.add(new ArrayList<Integer>(array));
+                array.clear();
+                list.addLast(null);
+                continue;
+            }
+            if(node.left!=null)
+                list.addLast(node.left);
+            if(node.right!=null)
+                list.addLast(node.right);
+        }
+        return res;
+    }
+}
