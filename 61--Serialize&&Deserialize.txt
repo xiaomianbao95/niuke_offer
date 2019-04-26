@@ -1,0 +1,65 @@
+请实现两个函数，分别用来序列化和反序列化二叉树
+
+二叉树序列化就是遍历二叉树为字符串，反序列化就是遍历字符串
+重构二叉树，如果二叉树序列化从根节点开始，我们再反序列化时
+开始读的数值就是根节点，前序遍历是从根节点开始的，所以我们
+前序遍历二叉树，当遇到null时，我们用一个特殊字符代替“$”,
+不同节点之间要用“，”隔开，方便反序列化时分隔开每个节点
+反序列化时，再根据前序遍历重构二叉树。
+第一种：反序列化时用一个队列存字符串数组，然后一个个取出重构二叉树
+import java.util.Queue;
+import java.util.LinkedList;
+public class Solution {
+    String Serialize(TreeNode root) {
+        if(root==null){
+            return "$,";
+        }
+        StringBuffer sb=new StringBuffer(root.val+",");
+        sb.append(Serialize( root.left));
+        sb.append(Serialize( root.right));
+        return sb.toString();
+  }
+    TreeNode Deserialize(String str) {
+       String[] ss=str.split(",");
+        Queue<String> queue=new LinkedList<>();
+        for(int i=0;i<ss.length;i++){
+            queue.offer(ss[i]);
+        }
+        return pre(queue);
+        }
+    TreeNode pre(Queue<String> queue){
+        String val=queue.poll();
+        if(val.equals("$"))
+            return null;
+        TreeNode root=new TreeNode(Integer.parseInt(val));
+        root.left=pre(queue);
+        root.right=pre(queue);
+        return root;
+    }
+}
+第二种：不用队列存字符串数组，定义一个index,每次遍历+1，以它为索引取字符串数组中内容。
+public class Solution {
+    int index=-1;
+    String Serialize(TreeNode root) {
+        if(root==null){
+            return "$,";
+        }
+        StringBuffer sb=new StringBuffer(root.val+",");
+        sb.append(Serialize( root.left));
+        sb.append(Serialize( root.right));
+        return sb.toString();
+  }
+    TreeNode Deserialize(String str) {
+        index++;
+        if(index>str.length())
+            return null;
+       String[] ss=str.split(",");
+        TreeNode root=null;
+        if(!ss[index].equals("$")){
+            root=new TreeNode(Integer.parseInt(ss[index]));
+            root.left=Deserialize(str);
+            root.right=Deserialize(str);
+        }
+        return root;
+    }
+}
