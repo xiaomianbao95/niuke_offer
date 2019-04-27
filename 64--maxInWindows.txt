@@ -31,3 +31,32 @@ public class Solution {
 对于新来的元素与双端队列中的元素比较，把队列里比它小的都移出去，
 负责把这个数的下标与队列里比它大的数x的下标相比较，判断x是否已经不属于滑动窗口了，
 不属于就直接移除队列。
+import java.util.ArrayList;
+import java.util.LinkedList;
+public class Solution {
+    public ArrayList<Integer> maxInWindows(int [] num, int size)
+    {
+        ArrayList<Integer> list=new ArrayList<Integer>();
+        if(num==null||size==0||(size>num.length))
+           return list;
+        LinkedList<Integer> queue=new LinkedList<Integer>();
+        for(int i=0;i<size;i++){
+            while(!queue.isEmpty()&&num[i]>num[queue.getLast()]){
+                queue.removeLast();
+            }
+            queue.addLast(i);
+        }
+        list.add(num[queue.getFirst()]);
+        for(int i=size;i<num.length;i++){
+            while(!queue.isEmpty()&&num[i]>num[queue.getLast()]){
+                queue.removeLast();
+            }
+            queue.addLast(i);
+            if(i-queue.getFirst()+1>size){
+                queue.removeFirst();
+            }
+            list.add(num[queue.getFirst()]);
+        }
+        return list;
+    }
+}
