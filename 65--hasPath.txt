@@ -48,3 +48,56 @@ public class Solution {
         return false;
     }
 }
+第二种方法：非递归方法：dfs深度优先算法
+import java.util.Stack;
+public class Solution {
+    public boolean hasPath(char[] matrix, int rows, int cols, char[] str)
+    {
+        if(matrix==null||rows<1||cols<1||str==null||str.length>matrix.length)
+            return false;
+        boolean[] visited=new boolean[matrix.length];//标记矩阵
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(dfs(matrix,rows,cols,i,j,str,visited)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private static int[] x={1,0,-1,0};
+    private static int[] y={0,1,0,-1};//用来走到当前格子的上下左右，顺序为：下，右，上，左；
+    private boolean dfs(char[] matrix,int rows,int cols,int i,int j,char[] str,boolean[] visited){
+        if(matrix[j+i*cols]!=str[0]) return false;
+        Stack<Integer> s=new Stack<Integer>();
+        int index=0;
+        s.push(j+i*cols);//压入当前格子的位置
+        while(!s.isEmpty()){
+            int current=s.peek();
+            if(visited[current]==true){
+                visited[current]=false;//取消访问记录
+                s.pop();//退出该节点；
+                if(--index<0)return false;
+                continue;//阻止该路径再次遍历
+            }
+            visited[current]=true;
+            if((++index)==str.length) return true;
+            /*
+            *把当前格子上下左右满足要求的点加入到栈
+            *1.边界条件：横坐标：xx=current/cols+x[k]，纵坐标：yy=current%cols+y[k]
+            *2.必须未访问过的
+            *3.必须匹配：matrix[cur]==str[index]
+            */
+            for(int k=0;k<4;k++){
+                int xx=current/cols+x[k];
+                int yy=current%cols+y[k];
+                int cur=xx*cols+yy;
+                if(xx>=0&&xx<rows&&yy>=0&&yy<cols&&
+                   visited[cur]==false&&matrix[cur]==str[index]){
+                    s.push(cur);
+                }
+            }
+        }
+        return false;
+    }
+}
