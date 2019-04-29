@@ -13,6 +13,8 @@
 在第n个字符周围都没找到第n+1个字符，这时候只好回到路径上第n-1个字符，重新定位第n个字符。
 由于路径不能重复进入矩阵中的格子，所以还需要一个int矩阵标记出已经符合路径中字符的格子。
 标记为1后，此后不能再进入此格子。
+注意：根据i和j先确定一维数组的位置，因为给定的matrix是一个一维数组，i*cols+j可以得到
+一维数组的位置。
 public class Solution {
     public boolean hasPath(char[] matrix, int rows, int cols, char[] str)
     {
