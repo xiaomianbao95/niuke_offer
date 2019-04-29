@@ -1,0 +1,38 @@
+地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，
+下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，
+机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。
+请问该机器人能够达到多少个格子？
+思路：回溯法
+机器人从0,0开始每次可以往上下左右移动一格，我们最后要求的是机器人的运动范围，也就是所有能满足条件
+到达的格子，所以从上下左右每条路径走的满足要求得格子都要算，即所有的求和，因为已经走过的就不能再走了
+所以我们需要一个布尔标记矩阵来标记已经走过的为true，注意题目要求，不能进入行坐标和列坐标的数位之和
+大于k的格子，所以在进入格子之前我们要算下行坐标和列坐标之和是否小于等于k.
+public class Solution {
+    public int movingCount(int threshold, int rows, int cols)
+    {
+        if(rows==0||cols==0||threshold<0)
+            return 0;
+        boolean[] visited=new boolean[rows*cols];
+        int count=search(threshold,rows,cols,0,0,visited);
+        return count;
+    }
+    public int search(int threshold,int rows,int cols,int i,int j,boolean[] visited){
+        int count=0;
+        if(i>=0&&j>=0&&i<rows&&j<cols&&visited[i*cols+j]==false&&(getsum(i)+getsum(j))<=threshold){
+            visited[i*cols+j]=true;
+            count=1+search(threshold,rows,cols,i-1,j,visited)+
+                search(threshold,rows,cols,i+1,j,visited)+
+                search(threshold,rows,cols,i,j-1,visited)+
+                search(threshold,rows,cols,i,j+1,visited);
+        }
+            return count;
+    }
+    private int getsum(int number){
+        int sum=0;
+        while(number>0){
+            sum+=number%10;
+            number/=10;
+        }
+        return sum;
+    }
+}
