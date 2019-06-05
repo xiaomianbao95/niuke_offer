@@ -1,0 +1,29 @@
+在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，
+每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一
+个整数，判断数组中是否含有该整数。
+思路分析：
+分析题目二维数组每一行从左到右递增，每一列从上到下递增，我们要找的这个如果在某一行某一列
+大于小于数组中的数我们可以同通过向上下左右走可以使它变小，可以如果变小时向上走时还向左走，
+这就是一个复杂问题了，所以我们通过二维数组的一个角出发让它只有两个方向选择而不是四个这样就简单了
+从左下角或者右下角开始都可以。
+注意：1.边界问题，2，走完还没有找到就是没有这个数；3,二维数组的行列数怎么算：row=array.length
+col=array[0].length;
+程序如下：
+public class Solution {
+    public boolean Find(int target, int [][] array) {
+        if(array==null)
+            return false;
+        int n=array.length-1;
+        int m=0;
+        while(n>=0&&m<=(array[0].length-1)){
+            if(array[n][m]>target){
+                n--;
+            }else if(array[n][m]<target){
+                m++;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+}   
