@@ -1,0 +1,44 @@
+请实现一个函数，将一个字符串中的每个空格替换成“%20”。
+例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+
+思路：
+题目给的是StringBuffer 型的字符串，我们要找到字符串中的空格然后替换所以从前往后找可以用
+StringBuffer中的charAt()方法，它返回的是一个字符，所以从开始一直找到最后看==' '吗，如果不等于
+我们直接把每个字符拼接在一起，如果==' ' 就用"%20"替换" "去拼接。
+
+程序：
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+        if(str==null)
+            return null;
+        StringBuffer s1=new StringBuffer();
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==' '){
+                s1.append("%20");
+            }else{
+                s1.append(str.charAt(i));
+            }
+        }
+        return s1.toString();
+    }
+}
+
+错误做法：
+
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+        if(str==null)
+            return null;
+        String str=str.toString();
+        char[] arr=str.toCharArray();
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]==' ')
+                arr[i]="20%";
+        }
+        return arr.toString();
+         
+    }
+}
+
+本来想通过toCharArray()转换成字符数组，找到字符' ',然后再 arr[i]="20%"但是arr[]是字符数组不能
+等于字符串，所以行不通。arr[i]='%20';也是错误陈述。
