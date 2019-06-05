@@ -43,3 +43,62 @@ public class Solution {
 本来想通过toCharArray()转换成字符数组，找到字符' ',然后再 arr[i]="20%"但是arr[]是字符数组不能
 等于字符串，所以行不通。arr[i]='%20';也是错误陈述，因为字符占两个字节，%20占三字节不正确表述，字符
 可以是单个字母或者单个汉字。
+可以改成如下：
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+        if(str==null)
+            return null;
+        int spacenum=0;
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==' ')
+                spacenum++;
+        }
+        int newlength=str.length()+spacenum*2;
+        int newindex=0;
+        char[] newarr=new char[newlength];//建立一个新数组长度是原来的加空格的两倍
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==' '){
+               newarr[newindex++]='%';
+               newarr[newindex++]='2';
+               newarr[newindex++]='0';
+            }else{
+                newarr[newindex++]=str.charAt(i);
+            }
+        }
+        String s=new String(newarr);//把字符数组转成字符串
+    	return s;
+    }
+}
+
+别人的方法，从后往前替换，感觉其实和我这个差不多一样呀，复杂度也并没有降低，不过也是一种思路
+通过先统计空格的数，然后扩大字符串长度用setLength() newlength=原来长度+spacenum*2,因为原字符有空格
+%20相当于三个空格，所以+spacenum*2;
+从后往前，遇到空格时用setCharAt(int index,char ch)方法，把指定位置用字符替换这样&20，变成三个字符
+'%','2','0';
+
+程序如下:
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+        if(str==null)
+            return null;
+        int spacenum=0;
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==' ')
+                spacenum++;
+        }
+        int oldindex=str.length()-1;
+        int newlength=str.length()+spacenum*2;
+        int indexnew=newlength-1;
+        str.setLength(newlength);
+        for(int i=oldindex;i>=0;i--){
+            if(str.charAt(i)==' '){
+                str.setCharAt(indexnew--,'0');
+                str.setCharAt(indexnew--,'2');
+                str.setCharAt(indexnew--,'%');
+            }else{
+                str.setCharAt(indexnew--,str.charAt(i));
+            }
+        }
+    	return str.toString();
+    }
+}
