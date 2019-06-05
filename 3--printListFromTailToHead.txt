@@ -1,0 +1,39 @@
+输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
+思路：
+
+注意这个链表是从尾到头打印出来，而链表从头一个个才能找到尾，而递归找一直找到
+尾。递归完成退出来时是从尾退的，此时就可以把尾的数加入arraylist数组，一步步退出来就可以从尾一直加
+到头的数据了。
+import java.util.ArrayList;
+public class Solution {
+    ArrayList<Integer> list=new ArrayList<Integer>();
+    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+        if(listNode==null)
+            return list;
+        if(listNode!=null){
+            printListFromTailToHead(listNode.next);
+            list.add(listNode.val);
+        }
+        return list;
+    }
+}
+
+因为从尾到头输出，我们可以从头开始把数据存入一个栈，因为栈“先入后出，后入先出”
+所以再一个个输出可以从尾到头返回一个arraylist;
+import java.util.*;
+public class Solution {
+    ArrayList<Integer> list=new ArrayList<Integer>();
+    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+        if(listNode==null)
+            return list;
+        Stack<Integer> stack=new Stack<Integer>();
+        while(listNode!=null){
+            stack.push(listNode.val);
+            listNode=listNode.next;
+        }
+        while(!stack.isEmpty()){
+            list.add(stack.pop());
+        }
+        return list;
+    }
+}
