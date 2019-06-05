@@ -1,0 +1,32 @@
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果
+中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则
+重建二叉树并返回。
+思路：
+
+前序遍历：中左右，中序遍历：左中右
+所以前序遍历第一个就是根节点，中序遍历是先遍历完左树再遍历右树，这样我们可以用前序遍历得到的根节点去中序遍历中
+找到根节点然后把数组就可以分为两部分左边就是左子树的，然后可以再用中序遍历下一个再去左子数组再找到
+根节点依次类推，所以我们可以用递归实现，
+import java.util.Arrays;
+public class Solution {
+    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
+        
+        if(pre.length==0||in.length==0)
+            return null;
+        TreeNode root=new TreeNode(pre[0]);
+            for(int j=0;j<in.length;j++){
+                if(pre[0]==in[j]){
+                    root.left=reConstructBinaryTree(Arrays.copyOfRange(pre,1,j+1),Arrays.copyOfRange(in,0,j));
+                    root.right=reConstructBinaryTree(Arrays.copyOfRange(pre,j+1,pre.length),Arrays.copyOfRange(in,j+1,in.length));
+                }
+            }
+        return root;
+    }
+}
+
+注意:
+用中序遍历得到的根节点再前序遍历中找到根节点，那么从根节点以前的就都是左子树的，同样在中序遍历数组中同样个数的数字是左子树的
+在截取数组一部分时可以用Arrays中的copyOfRange(要截取的数组，开始位置，截取结束位置)，
+每次递归pre[]的pre[0]就是根节点用它去找。
+还有要新建立一个树，先建根节点，用TreeNode root=new TreeNode(pre[0])。
+还有递归终止条件：pre.length==0||in.length==0；
