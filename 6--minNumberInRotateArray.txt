@@ -1,0 +1,45 @@
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非减排序的数组的一个
+旋转，输出旋转数组的最小元素。 例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。
+ NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+
+分析：数组经过旋转把最小的放在了中间某处，所以我们可以从头找，一直找到第一个变小的数，就是要找的
+还要注意题目说非递减，有可能严格递增，有可能非严格递增。
+
+public class Solution {
+    public int minNumberInRotateArray(int [] array) {
+        int len=array.length;
+        if(len==0)
+            return 0;
+        int min=array[0];
+        for(int i=0;i<len;i++){
+            if(array[i]<min)
+                return array[i];
+        }
+        return min;
+    }
+}
+
+第二种方法：一个指针从头开始，一个从尾开始，mid=(low+high)/2;
+如果中间的大于最后的，则最小的再他们中间，让low=mid+1;如果中间的小于最后的，则最小的你不会在
+他们中间，high=mid,如果中间的等于最后的，不知道最小的在左边还是右边，就要顺序比较，可以取
+low=low+1;或者high=high-1;
+public class Solution {
+    public int minNumberInRotateArray(int [] array) {
+        int len=array.length;
+        if(len==0)
+            return 0;
+        int low=0;
+        int high=len-1;
+        while(low<high){
+            int mid=(low+high)/2;
+            if(array[mid]>array[high]){
+                low=mid+1;
+            }else if(array[mid]<array[high]){
+                high=mid;
+            }else{
+                low=low+1;
+            }
+        }
+        return array[low];
+    }
+}
