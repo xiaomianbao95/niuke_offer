@@ -1,0 +1,21 @@
+一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法
+（先后次序不同算不同的结果）。
+分析:n=0,只有0种跳法，n=1，有一种跳法，n节台阶跳法f(n),如果第一次跳一级剩下n-1级总有f(n-1)
+种跳法，如果第一次跳两级，剩下n-2级总有f(n-2)级跳法，所以f(n)=f(n-1)+f(n-2);
+public class Solution {
+    public int JumpFloor(int target) {
+        if(target==0)
+            return 0;
+        if(target==1)
+            return 1;
+        int num1=1;
+        int num2=1;
+        int result=0;
+        for(int i=2;i<=target;i++){
+            result=num1+num2;
+            num1=num2;
+            num2=result;
+        }
+        return result;
+    }
+}
