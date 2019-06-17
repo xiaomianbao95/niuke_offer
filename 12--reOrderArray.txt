@@ -1,0 +1,51 @@
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，
+所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+
+分析：
+把奇数要放在偶数，并且相对位置不能改变，我们可以先把奇数个数统计出来，然后逐个比较是奇数
+就从0开始存放，是偶数就从奇数个数位置开始存放。这样可以保证相对位置不变，还可以把奇数都放
+在偶数前面。
+
+public class Solution {
+    public void reOrderArray(int [] array) {
+        int len=array.length;
+        int[] arr=new int[len];
+        int oddnum=0;
+        int k=0;
+        for(int i=0;i<len;i++){
+            if((array[i]&1)!=0)
+                oddnum++;
+        }
+        for(int i=0;i<len;i++){
+            if((array[i]&1)==0){
+                arr[oddnum++]=array[i];
+            }else{
+                arr[k++]=array[i];
+            }
+        }
+        for(int i=0;i<len;i++){
+            array[i]=arr[i];
+        }
+    }
+}
+第二种：不用另外开辟一个存储空间，
+我们定义一个变量记录已经从0开始存放的奇数的位置，然后往后找碰到奇数就一直交换直到k+1的位置，
+即把这个奇数换到k+1的位置，就OK了
+public class Solution {
+    public void reOrderArray(int [] array) {
+        int k=0;
+        int len=array.length;
+        for(int i=0;i<len;i++){
+            if((array[i]&1)!=0){
+                int j=i;
+                while(j>k){
+                    int temp=array[j];
+                    array[j]=array[j-1];
+                    array[j-1]=temp;
+                    j--;
+                }
+                 k++;
+            }
+        }
+    }
+}
