@@ -1,0 +1,42 @@
+输入一个链表，输出该链表中倒数第k个结点。
+分析：
+要知道倒数第k个结点，因为链表中想知道下一个结点，必须知道前一个，不能直接根据索引取结点
+我们可以定义两个指针，一个先走k-1步，然后两个一起走，快的走到链表尾，慢的指的正好的倒数第k个
+
+注意：给一个链表ListNode head heah是头结点，也就是链表第一个结点
+要考虑k<0 还有k>链表大小的问题，还有链表为空的问题；
+public class Solution {
+    public ListNode FindKthToTail(ListNode head,int k) {
+        ListNode Phead=head;
+        ListNode Thead=head;
+        int i=0;
+        for( ;Phead!=null;i++){
+            if(i>=k)
+                Thead=Thead.next;
+             Phead= Phead.next;
+        }
+        return i<k?null:Thead;
+    }
+}
+
+另一种形式：
+public class Solution {
+    public ListNode FindKthToTail(ListNode head,int k) {
+        if(head==null||k<0)
+            return null;
+        ListNode Phead=head;
+        ListNode Thead=head;
+        int i=0;
+        while(i<k){
+            if(Phead==null)
+                 return null;
+            Phead=Phead.next;
+            i++;
+        }
+        while(Phead!=null){
+            Phead=Phead.next;
+            Thead=Thead.next;
+        }
+        return Thead;
+    }
+}
