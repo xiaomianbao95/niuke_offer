@@ -1,0 +1,21 @@
+输入一个链表，反转链表后，输出新链表的表头。
+分析：
+反转一个链表，那我们就让链表当前节点的下一个指向变成之前的就可以了，
+注意：现在链表的头结点反转后应该指向null，所以定义一个指针初始时是null
+让头结点反指向null.
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+        if(head==null)
+            return null;
+        ListNode current=null;
+        ListNode temp=head;
+        while(temp!=null){
+            ListNode flag=temp.next;
+            temp.next=current;
+            current=temp;
+            temp=flag;
+        }
+        return current;
+
+    }
+}
