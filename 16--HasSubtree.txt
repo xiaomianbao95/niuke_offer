@@ -1,0 +1,59 @@
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+分析：判断B是不是A的子树，我们从根节点开始判断，若根节点相等，再继续判断左子树是否相等，
+判断完左子树再判断右子树，注意若B已经为空，A还未为空，说明这部分子树是A中的一部分，我们
+可以用递归实现，当A或B某一个为空时我们就直接返回false。或从跟开始判断没有找到子树，在从A的
+左节点开始判断，若还没找到，再从A的右子节点开始找。
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        if(root1==null||root2==null)
+            return false;
+        if(root1!=null&&root2!=null){
+            if(root1.val==root2.val)//从根节点开始找，若匹配，再继续比较他们的左右子节点
+                HasSubtree2(root1,root2);
+            if(HasSubtree2(root1,root2)==false){//若从根节点开始的不匹配，再从左子节点开始找开始匹配的
+                 HasSubtree(root1.left,root2);
+            }else{
+                return true;
+            }
+            if(HasSubtree(root1.left,root2)==false){//若从左节点开始的不匹配，再从右子节点开始找匹配的
+                HasSubtree(root1.right,root2);
+            }else{
+                return true;
+            }
+        }
+        return HasSubtree(root1.right,root2);
+    }
+    public boolean HasSubtree2(TreeNode root1,TreeNode root2){
+        if(root2==null)
+            return true;
+        if(root1==null)
+            return false;
+        if(root1.val!=root2.val)
+            return false;
+        return HasSubtree2(root1.left,root2.left)&&HasSubtree2(root1.right,root2.right);    }
+}
+第二种;在找最开始匹配的根节点时，可以先定义一个boolean 型变量，记录每次执行的结果，
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        boolean result=false;
+        if(root1!=null&root2!=null){
+            if(root1.val==root2.val)
+                result=HasSubtree2(root1,root2);
+            if(!result){
+                result=HasSubtree(root1.left,root2);
+            }
+            if(!result){
+                result=HasSubtree(root1.right,root2);
+            }
+        }
+        return result;
+    }
+    public boolean HasSubtree2(TreeNode root1,TreeNode root2){
+        if(root2==null)
+            return true;
+        if(root1==null)
+            return false;
+        if(root1.val!=root2.val)
+            return false;
+        return HasSubtree2(root1.left,root2.left)&&HasSubtree2(root1.right,root2.right);    }
+}
