@@ -1,0 +1,63 @@
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+
+分析： 我们要先建一个链表头结点，用来存放合并之后的链接点，两个链表都是单调递增的，我们通过从
+两个链表的头开始互相比较，较小的放在新建的头结点之后，一直比较，直到一个为空，把另一个直接全复制到
+新建的链表节点之后就可以了，
+注意这里新建一个链表头结点如何建ListNode temp=new ListNode(-1);然后temp.next就是两个相互
+比较的链表里最小的，最后返回temp.next 就是合并后的链表的第一个节点。
+第一种非递归版本
+
+/*
+public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}*/
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        ListNode temp=new ListNode(-1);
+        ListNode root=temp;
+        while(list1!=null&&list2!=null){
+            if(list1.val<=list2.val){
+                temp.next=list1;
+                temp=list1;
+                list1=list1.next;
+            }else{
+                temp.next=list2;
+                temp=list2;
+                list2=list2.next;
+            }
+        }
+        if(list1==null){
+            temp.next=list2;
+        }
+        if(list2==null){
+            temp.next=list1;
+        }
+        return root.next;
+            
+    }
+}
+
+第二种递归
+
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        if(list1==null)
+            return list2;
+        if(list2==null)
+            return list1;
+        ListNode Mergehead=null;
+        if(list1.val<=list2.val){
+            Mergehead=list1;
+            Mergehead.next=Merge(list1.next,list2);
+        }else{
+            Mergehead=list2;
+            Mergehead.next=Merge(list1,list2.next);
+        }
+        return Mergehead;
+    }
+}
