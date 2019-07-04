@@ -1,0 +1,39 @@
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字
+均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能
+是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+分析：
+要判断第二序列是不是弹出顺序，那我们就按要求的入栈顺序再模拟入栈出栈过程看看能不能得到和第二序列一模一样的，
+我们需要一个栈存放从第一个序列入栈出站的数，从第二个序列第一个数开始比较，如果栈不为空时，看看和栈顶元素是否相等
+不相等，我们就要按入栈顺序从第一个序列里开始压数据进辅助栈，每次压之前比较这个数和第二序列的数是不是相等，不相等
+就说明还没有压入到相等的那个数，定义一个index,记录第一个序列的几个数压入辅助栈了，压入一个index+1,如果到了相等的
+那个数，就把它压入辅助栈，然后index+1,再出栈，内循环就可以跳出了，在重复上一次过程比较第二个序列下一个数，直到
+第二个序列所有数对比完，辅助栈为空说明满足要求，不为空，说明不是弹出序列，因为如果是正确的序列，之前就在辅助栈弹出了
+辅助栈最后只能为空。
+import java.util.ArrayList;
+import java.util.Stack;
+public class Solution {
+    public boolean IsPopOrder(int [] pushA,int [] popA) {
+      if(pushA==null||popA==null)
+          return false;
+        Stack<Integer> stack=new Stack<>();
+        int index=0;
+        for(int i=0;i<popA.length;i++){
+            if(!stack.isEmpty()&&popA[i]==stack.peek()){
+                stack.pop();
+            }else{
+                for(int j=index;j<pushA.length;j++){
+                    if(pushA[j]==popA[i]){
+                        stack.push(pushA[j]);
+                        index++;
+                        stack.pop();
+                        break;
+                    }else{
+                        stack.push(pushA[j]);
+                        index++;
+                    }
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
