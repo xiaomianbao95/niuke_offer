@@ -1,0 +1,31 @@
+定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
+定义两个栈，一个存数据一个存最小的数，为了保持两个栈的数的个数相同，当node不小于当前的min栈顶元素时，仍然压min
+栈栈顶元素入min栈。
+
+import java.util.Stack;
+public class Solution {
+
+    Stack<Integer> data_stack=new Stack<Integer>();
+    Stack<Integer> min_stack=new Stack<Integer>();
+    public void push(int node) {
+        data_stack.push(node);
+        if(min_stack.size()==0||node<min_stack.peek()){
+            min_stack.push(node);
+        }else{
+            min_stack.push(min_stack.peek());
+        }
+    }
+    
+    public void pop() {
+        data_stack.pop();
+        min_stack.pop();
+    }
+    
+    public int top() {
+        return min_stack.peek();
+    }
+    
+    public int min() {
+        return min_stack.peek();
+    }
+}
