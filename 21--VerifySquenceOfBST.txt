@@ -1,0 +1,48 @@
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的
+任意两个数字都互不相同。
+分析：
+后序遍历是先左再右最后根，这个数如果是搜索二叉树则应该左子节点都小于根节点，右子节点都大于根节点，后序遍历出的数组的最后一个
+一定是树的根节点，我们从数组第一个开始找找到比最后一个大的，则从这个节点之前的就是右子树，之后的就是左子树，为了保证一定是
+二叉搜索树，我们同时要判断下从这个节点开始之后的节点是不都大于最后的根节点，然后再分别在左子树和右子树递归这个过程
+保证所有的左子树和右子树都为true。注意递归的终止条件！！！！
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence==null||sequence.length==0)
+            return false;
+        int start=0;
+        int end=sequence.length-1;
+        return judge(sequence,start,end);
+    }
+    public boolean judge(int [] sequence,int start,int end){
+        if(start>=end)
+            return true;
+        int i=start;
+        while(i<end&&sequence[i]<sequence[end])
+            i++;
+        int j=i;
+        for(;j<end;j++){
+            if(sequence[j]<sequence[end])
+                return false;
+        }
+        return (judge(sequence,start,i-1)&&judge(sequence,i,end-1));
+    }
+}
+非递归版本：
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence==null||sequence.length==0)
+            return false;
+        int len=sequence.length;
+        int i=0;
+        while(--len>0){
+            while(i<len&&sequence[i]<sequence[len]) 
+                i++;
+            while(i<len&&sequence[i]>sequence[len]) 
+                i++;
+            if(i<len)
+                return false;
+            i=0;
+        }
+        return true;
+    }
+}
