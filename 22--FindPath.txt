@@ -1,0 +1,24 @@
+输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下
+一直到叶结点所经过的结点形成一条路径。(注意: 在返回值的list中，数组长度大的数组靠前)
+分析：要在一颗二叉树中找出之和为某一个数的所有节点，并且还把最长的数组排在前面，我们肯定是从根节点开始找，把跟节点加入
+temp,然后目标值减去根节点看看它的值等不等于0，并且题目要求一直到叶节点，所以这个节点的左右子节点必须同时为null,
+满足后，这条路径上的节点就满足要求，可以加入list,否则再递归从左子节点开始找，然后再右子节点，注意每一条路径
+走到了叶节点，要把temp中最后的删除，回到当前节点的父节点，查找其他路径有没有满足要求的。
+public class Solution {
+    ArrayList<ArrayList<Integer>> list=new ArrayList<ArrayList<Integer>>();
+    ArrayList<Integer> temp=new ArrayList<Integer>();
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        if(root==null||target==0)
+            return list;
+        temp.add(root.val);
+        target=target-root.val; 
+        if(target==0&&root.left==null&&root.right==null){
+                list.add(new ArrayList<Integer>(temp));
+         }else{
+                FindPath(root.left,target);
+                FindPath(root.right,target);
+         }
+         temp.remove(temp.size()-1);
+         return list;
+    }
+}
