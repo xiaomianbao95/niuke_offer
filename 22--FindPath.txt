@@ -18,7 +18,7 @@ public class Solution {
                 FindPath(root.left,target);
                 FindPath(root.right,target);
          }
-         temp.remove(temp.size()-1);
+         temp.remove(temp.size()-1);//注意这一步
          return list;
     }
 }
