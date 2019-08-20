@@ -1,0 +1,32 @@
+题目描述
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,
+则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+输入描述:
+输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+
+先固定一个字符，然后排这个字符后面的
+把固定的字符依次和后面的字符交换之后再排后面的。
+
+import java.util.ArrayList;
+import java.util.*;
+public class Solution {
+    ArrayList<String> array=new ArrayList<String>();
+    public ArrayList<String> Permutation(String str) {
+        if(str==null) return array;
+       Permutation2(str.toCharArray(),0);
+        Collections.sort(array);
+       return array;
+    }
+    public void Permutation2( char[] str,int i){
+        if(i==str.length-1){
+            array.add(String.valueOf(str));
+            return;
+        }
+        for(int j=i;j<str.length;j++){
+            if(j!=i&&str[i]==str[j]) continue;
+            char temp=str[i];str[i]=str[j];str[j]=temp;
+            Permutation2(str,i+1);
+            char temp2=str[i];str[i]=str[j];str[j]=temp2;
+        }
+    }
+}
