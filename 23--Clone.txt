@@ -1,0 +1,64 @@
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），
+返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
+分析：因为是链表每一个节点都和上一个节点关联，要复制这个链表，并且还有一个任意指向的指针，我们可以先创建每个节点
+的复本连接在原本的节点后，这样从原来节点的任意指向节点，可以知道复本的任意指向节点是原本的下一个，最后把复制的和
+原本的链表拆分开就可以
+public class Solution {
+    public RandomListNode Clone(RandomListNode pHead)
+    {
+        if(pHead==null)
+            return null;
+        RandomListNode currentnode=pHead;
+        while(currentnode!=null){
+             RandomListNode node=new  RandomListNode(currentnode.label);
+            node.next=currentnode.next;
+            currentnode.next=node;
+            currentnode=node.next;
+        }
+        currentnode=pHead;
+        while(currentnode!=null){
+            if(currentnode.random!=null)
+                currentnode.next.random=currentnode.random.next;
+            currentnode=currentnode.next.next;
+        }
+        //拆分链表
+        currentnode=pHead;
+        RandomListNode clonenode=currentnode.next;
+        RandomListNode cur=clonenode;
+        while(currentnode.next!=null){
+            cur=currentnode.next;
+            currentnode.next=cur.next;
+            currentnode=cur;
+        }
+        return clonenode;
+    }
+}
+
+还有一种是用hashmap存原本和复本以键值对的方式存放。
+import java.util.HashMap;
+public class Solution {
+    public RandomListNode Clone(RandomListNode pHead)
+    {
+        if(pHead==null)
+            return null;
+        HashMap<RandomListNode,RandomListNode> map=new HashMap<RandomListNode,RandomListNode>();
+        RandomListNode head=pHead;
+        while(head!=null){
+            map.put(head,new RandomListNode(head.label));
+            head=head.next;
+        }
+        head=pHead;
+        while(head!=null){
+            map.get(head).next=map.get(head.next);
+            head=head.next;
+        }
+        head=pHead;
+        RandomListNode cpHead=map.get(head);
+        while(head!=null){
+            map.get(head).random=map.get(head.random);
+            head=head.next;
+        }
+        return cpHead;
+    }
+}
