@@ -1,0 +1,33 @@
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，
+只能调整树中结点指针的指向。
+
+分析二叉搜索树，所以左子树节点值都小于右子树节点值，转换为排序的双向链表，则要先看左子树的最下面的左子节点
+我们用栈存放节点，先进后出，保证了，最后放入的最小的先被弹出来处理这样就有序了。并且在处理过程中，还要看该节点
+是否有右子节点
+import java.util.*;
+public class Solution {
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if(pRootOfTree==null)
+            return null;
+        Stack<TreeNode> s=new Stack<TreeNode>();
+        TreeNode head=null;
+        TreeNode end=null;
+        while(!s.isEmpty()||pRootOfTree!=null){
+            while(pRootOfTree!=null){
+                s.push(pRootOfTree);
+                pRootOfTree=pRootOfTree.left;
+            }
+            pRootOfTree=s.pop();
+            if(head==null){
+                head=pRootOfTree;
+                end=pRootOfTree;
+            }else{
+                end.right=pRootOfTree;
+                pRootOfTree.left=end;
+                end=pRootOfTree;
+            }
+            pRootOfTree=pRootOfTree.right;
+        }
+        return head;
+    }
+}
